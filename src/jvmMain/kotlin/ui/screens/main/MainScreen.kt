@@ -1,6 +1,6 @@
 package ui.screens.main
 
-import Tables.R.RNominal
+import Tables.R.Nominal
 import androidx.compose.animation.Crossfade
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
@@ -51,7 +51,7 @@ fun MainScreen(){
                         Box(modifier = Modifier.fillMaxSize().padding(padding)){
                             Card(modifier = Modifier.fillMaxSize().padding(8.dp)){
                                 Row(modifier = Modifier.fillMaxSize()) {
-                                    Column(modifier = Modifier.padding(2.dp).weight(2f),horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top
+                                    Column(modifier = Modifier.padding(2.dp).weight(1.3f),horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top
                                     ) {
                                         Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Center){
                                             when(viewModel.viewState.mainScreenDialogState.value){
@@ -86,43 +86,48 @@ fun MainScreen(){
                                         Text(text = "Значения для R")
                                         Crossfade(viewModel.viewState.textfield_R.value){
                                             Column {
-//                                                Row{
-//                                                    Text(text = "E3 ")
-//                                                    Text(text = (RNominal.getClosestById(RNominal.E3.id,viewModel.viewState.textfield_R.value)).toString())
-//                                                }
-//                                                Row{
-//                                                    Text(text = "E6 ")
-//                                                    Text(text = RNominal.getClosestById(RNominal.E6.id,viewModel.viewState.textfield_R.value).toString())
-//                                                }
-//                                                Row{
-//                                                    Text(text = "E12 ")
-//                                                    Text(text = RNominal.getClosestById(RNominal.E12.id,viewModel.viewState.textfield_R.value).toString())
-//                                                }
-//                                                Row{
-//                                                    Text(text = "E24 ")
-//                                                    Text(text = RNominal.getClosestById(RNominal.E24.id,viewModel.viewState.textfield_R.value).toString())
-//                                                }
-//                                                Row{
-//                                                    Text(text = "E48 ")
-//                                                    Text(text = RNominal.getClosestById(RNominal.E48.id,viewModel.viewState.textfield_R.value).toString())
-//                                                }
-//                                                Row{
-//                                                    Text(text = "E96 ")
-//                                                    Text(text = RNominal.getClosestById(RNominal.E96.id,viewModel.viewState.textfield_R.value).toString())
-//                                                }
-                                                Row{
-                                                    Text(text = "E192 ")
-                                                    Text(text = RNominal.getClosestById(RNominal.E192.id,viewModel.viewState.textfield_R.value).toString())
+                                                for(nomimalId in Nominal.getListOfE()){
+                                                    ElevatedCard(shape = MaterialTheme.shapes.small, modifier = Modifier.padding(3.dp)){
+                                                        Row(modifier = Modifier.padding(3.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly){
+                                                            Text(text = Nominal.getById(nomimalId).name)
+                                                            Text(text = Nominal.getClosestById(nomimalId,viewModel.viewState.textfield_R.value).toString())
+                                                        }
+                                                    }
                                                 }
                                             }
 
                                         }
                                     }
                                     Column(modifier = Modifier.padding(2.dp).weight(1f),horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
-                                        Text(text = "Ряд L")
+                                        Text(text = "Значения для L")
+                                        Crossfade(viewModel.viewState.textfield_L.value){
+                                            Column {
+                                                for(nomimalId in Nominal.getListOfE()){
+                                                    ElevatedCard(shape = MaterialTheme.shapes.small, modifier = Modifier.padding(3.dp)){
+                                                        Row(modifier = Modifier.padding(3.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly){
+                                                            Text(text = Nominal.getById(nomimalId).name)
+                                                            Text(text = Nominal.getClosestById(nomimalId,viewModel.viewState.textfield_L.value).toString())
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                        }
                                     }
                                     Column(modifier = Modifier.padding(2.dp).weight(1f),horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
-                                        Text(text = "Ряд C")
+                                        Text(text = "Значения для C")
+                                        Crossfade(viewModel.viewState.textfield_C.value){
+                                            Column {
+                                                for(nomimalId in Nominal.getListOfE()){
+                                                    ElevatedCard(shape = MaterialTheme.shapes.small, modifier = Modifier.padding(3.dp)){
+                                                        Row(modifier = Modifier.padding(3.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly){
+                                                            Text(text = Nominal.getById(nomimalId).name)
+                                                            Text(text = Nominal.getClosestById(nomimalId,viewModel.viewState.textfield_C.value).toString())
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
 
                                 }
@@ -130,6 +135,7 @@ fun MainScreen(){
                         }
                     }
                     MainScreenTabs.Info ->{
+                        
 
                     }
                 }

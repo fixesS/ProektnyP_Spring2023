@@ -1,6 +1,6 @@
 package ui.screens.main
 
-import Tables.R.RUnit
+
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info

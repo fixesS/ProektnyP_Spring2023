@@ -1,9 +1,6 @@
 package Tables.R
 
-import java.lang.Integer.parseInt
-
-enum class RNominal(val id: Int, val values: List<Int>) {
-    E3(3, listOf(100,220,470)),
+enum class Nominal(val id: Int, val values: List<Int>) {
     E6(6, listOf(100,150,220,330,470,680)),
     E12(12, listOf(100,120,150,180,220,270,330,390,470,560,680,820)),
     E24(24,listOf(100,110,120,130,150,160,180,200,220,240,270,300,330,360,390,430,470,510,560,620,680,750,820,910)),
@@ -14,12 +11,12 @@ enum class RNominal(val id: Int, val values: List<Int>) {
     companion object{
         fun getListOfE():List<Int>{
             val list : MutableList<Int> = mutableListOf()
-            RNominal.values().map { list.add(it.id) }
+            Nominal.values().map { list.add(it.id) }
             return list
         }
-        fun getById(id :Int ): RNominal {
-            var E : RNominal = RNominal.E3
-            RNominal.values().map {
+        fun getById(id :Int ): Nominal {
+            var E : Nominal = Nominal.E6
+            Nominal.values().map {
                 if(it.id == id){
                     E = it
                 }
@@ -27,33 +24,84 @@ enum class RNominal(val id: Int, val values: List<Int>) {
             return E
         }
         fun getClosestById(id:Int,value:Float): Double {
-            val E : RNominal = RNominal.getById(id)
-            val list = E.values
-            val newValue = findZeros(value)
-            val newList = list.map { it.toFloat()/100.0 }
-
-            var min = Float.MAX_VALUE
-            //var closest = newValue
-//            for( eVal in newList){
-//                val diff = Math.abs(eVal -  newValue)
-//                if(diff<min){
-//                    min = diff.toFloat()
-//                    closest = eVal.toDouble()
-//                }
-//            }
-            //return findZeros(value);
-            //println(newList)
-            //println(newValue)
-            //println(closest)
-            //println(CloseR(452.0,192).roundTo(3))
-            return CloseR(value.toDouble(),E.id).roundTo(3);
+            if(id==6){
+                return E_6(value.toDouble())
+            }else if(id == 12){
+                return E_12(value.toDouble())
+            }else if(id == 24){
+                return E_24(value.toDouble())
+            }else{
+                return CloseR(value.toDouble(),id).roundTo(3);
+            }
         }
         private fun findZeros(value: Float): Double{
             val num  = value.toInt().toString().length - 1;
             val result = value/ Math.pow(10.0,num.toDouble())
             return result;
         }
-
+        fun E_6(Val: Double): Double {
+            if (Val <= 0) {
+                return 0.0
+            }
+            val Clist = "1,1.5,2.2,3.3,4.7,6.8,10"
+            val Vals = Clist.split(",").map { it.toDouble() }.toTypedArray() //convert to zero based array;
+            val n = Vals.size
+            //find mantissa & exponent of Val;
+            val Expo = Math.floor(Math.log10(Val))
+            val Mant = Val / Math.pow(10.0, Expo)
+            var min_dist = 1000.0
+            var closest = 0
+            for (i in 0 until n) {
+                val dist = Math.abs(Mant - Vals[i])
+                if (dist < min_dist) {
+                    min_dist = dist
+                    closest = i
+                }
+            }
+            return (Vals[closest] * Math.pow(10.0, Expo)).roundTo(3)
+        }
+        fun E_12(Val: Double): Double {
+            if (Val <= 0) {
+                return 0.0
+            }
+            val Clist = "1,1.2,1.5,1.8,2.2,2.7,3.3,3.9,4.7,5.6,6.8,8.2,10"
+            val Vals = Clist.split(",").map { it.toDouble() }.toTypedArray() //convert to zero based array;
+            val n = Vals.size
+            //find mantissa & exponent of Val;
+            val Expo = Math.floor(Math.log10(Val))
+            val Mant = Val / Math.pow(10.0, Expo)
+            var min_dist = 1000.0
+            var closest = 0
+            for (i in 0 until n) {
+                val dist = Math.abs(Mant - Vals[i])
+                if (dist < min_dist) {
+                    min_dist = dist
+                    closest = i
+                }
+            }
+            return (Vals[closest] * Math.pow(10.0, Expo)).roundTo(3)
+        }
+        fun E_24(Val: Double): Double {
+            if (Val <= 0) {
+                return 0.0
+            }
+            val Clist = "1,1.1,1.2,1.3,1.5,1.6,1.8,2.0,2.2,2.4,2.7,3.0,3.3,3.6,3.9,4.3,4.7,5.1,5.6,6.2,6.8,7.5,8.2,9.1,10"
+            val Vals = Clist.split(",").map { it.toDouble() }.toTypedArray() //convert to zero based array;
+            val n = Vals.size
+            //find mantissa & exponent of Val;
+            val Expo = Math.floor(Math.log10(Val))
+            val Mant = Val / Math.pow(10.0, Expo)
+            var min_dist = 1000.0
+            var closest = 0
+            for (i in 0 until n) {
+                val dist = Math.abs(Mant - Vals[i])
+                if (dist < min_dist) {
+                    min_dist = dist
+                    closest = i
+                }
+            }
+            return (Vals[closest] * Math.pow(10.0, Expo)).roundTo(3)
+        }
         fun CloseR(Rval: Double, IEASeries: Int): Double {
             if (Rval <= 0) {
                 return 0.0
@@ -77,36 +125,9 @@ enum class RNominal(val id: Int, val values: List<Int>) {
             val y = Math.pow(10.0, Expo)
             return x*y
         }
-
         fun Double.roundTo(numDigits: Int): Double {
             val factor = Math.pow(10.0, numDigits.toDouble())
             return Math.round(this * factor) / factor
-        }
-    }
-}
-enum class RUnit(val id: Int,val tag:String,val value: Float){
-    Om(1,"Ом",1f),
-    daOm(2,"даОм",10f),
-    gOm(3,"гОм",100f),
-    dOm(4,"дОм",0.1f),
-    cOm(5,"cОм",0.01f),
-    kOm(6,"кОм",1000f),
-    mOm(7,"мОм",0.001f);
-
-    companion object{
-        fun getListOfUnits():List<Int>{
-            val list : MutableList<Int> = mutableListOf()
-            RUnit.values().map { list.add(it.id) }
-            return list
-        }
-        fun getById(id :Int ): RUnit {
-            var Unit : RUnit = RUnit.Om
-            RUnit.values().map {
-                if(it.id == id){
-                    Unit = it
-                }
-            }
-            return Unit
         }
     }
 }
